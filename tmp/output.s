@@ -1,6 +1,6 @@
 	.text
 	.attribute	4, 16
-	.attribute	5, "rv64i2p1_m2p0_a2p1_c2p0"
+	.attribute	5, "rv64i2p1_f2p2_d2p2_zicsr2p0"
 	.file	"LLVMDialectModule"
 	.section	.sdata,"aw",@progbits
 	.p2align	3, 0x0                          # -- Begin function print::print::main(f0)
@@ -8,7 +8,7 @@
 	.quad	3179672657468351521             # 0x2c20776f726c6421
 	.text
 	.globl	"print::print::main(f0)"
-	.p2align	1
+	.p2align	2
 	.type	"print::print::main(f0)",@function
 "print::print::main(f0)":               # @"print::print::main(f0)"
 	.cfi_startproc
@@ -54,7 +54,7 @@
 	.cfi_endproc
                                         # -- End function
 	.globl	"_mlir_ciface_print::print::main(f0)" # -- Begin function _mlir_ciface_print::print::main(f0)
-	.p2align	1
+	.p2align	2
 	.type	"_mlir_ciface_print::print::main(f0)",@function
 "_mlir_ciface_print::print::main(f0)":  # @"_mlir_ciface_print::print::main(f0)"
 	.cfi_startproc
