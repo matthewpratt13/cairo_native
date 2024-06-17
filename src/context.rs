@@ -63,6 +63,7 @@ impl NativeContext {
         &self,
         program: &Program,
         debug_locations: Option<DebugLocations>,
+        triple: Option<&str>,
     ) -> Result<NativeModule, Error> {
         static INITIALIZED: OnceLock<()> = OnceLock::new();
         INITIALIZED.get_or_init(|| unsafe {
@@ -72,7 +73,14 @@ impl NativeContext {
             LLVM_InitializeAllAsmPrinters();
             tracing::debug!("initialized llvm targets");
         });
-        let target_triple = get_target_triple();
+
+        // if no target triple is specified, get the default (i.e., native) triple
+        let target_triple = match triple {
+            Some(t) => t.to_string(),
+            None => get_target_triple(),
+        };
+
+        // let target_triple = get_target_triple();
 
         let module_region = Region::new();
         module_region.append_block(Block::new(&[]));

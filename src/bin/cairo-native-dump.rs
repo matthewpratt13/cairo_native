@@ -44,7 +44,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
 
     // Compile the program.
-    let module = context.compile(&program, debug_info)?;
+    let module = context.compile(
+        &program,
+        debug_info,
+        args.target_triple.as_ref().map(|x| x.as_str()),
+    )?;
 
     // Write the output.
     let output_str = module
@@ -148,6 +152,9 @@ fn load_program<'c>(
 struct CmdLine {
     #[clap(value_parser = parse_input)]
     input: PathBuf,
+
+    #[clap(long = "target-triple", default_value = None)]
+    target_triple: Option<String>,
 
     #[clap(short = 'o', long = "output", value_parser = parse_output, default_value = "-")]
     output: CompilerOutput,

@@ -30,6 +30,11 @@ struct Args {
     /// Replaces sierra ids with human-readable ones.
     #[arg(short, long, default_value_t = false)]
     replace_ids: bool,
+
+    // specify custom target triple (e.g., `riscv32gc-unknown-linux-gnu`)
+    #[arg(long, default_value = None)]
+    target_triple: Option<String>,
+
     /// Optimization level, Valid: 0, 1, 2, 3. Values higher than 3 are considered as 3.
     #[arg(short = 'O', long, default_value_t = 0)]
     opt_level: u8,
@@ -40,6 +45,9 @@ struct Args {
 }
 
 fn main() -> anyhow::Result<()> {
+
+    println!("foo bar");
+
     // Configure logging and error handling.
     tracing::subscriber::set_global_default(
         FmtSubscriber::builder()
@@ -58,7 +66,11 @@ fn main() -> anyhow::Result<()> {
 
     // Compile the sierra program into a MLIR module.
     let native_module = native_context
-        .compile(&sierra_program, Some(debug_locations))
+        .compile(
+            &sierra_program,
+            Some(debug_locations),
+            args.target_triple.as_ref().map(|x| x.as_str()),
+        )
         .unwrap();
 
     let output_mlir = args
