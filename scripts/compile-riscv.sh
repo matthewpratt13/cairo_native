@@ -12,7 +12,7 @@ cargo r --profile optimized-dev --all-features --bin cairo-native-dump $1 --targ
 riscv64-unknown-elf-as ./tmp/output.s -o ./tmp/output.o
 
 # Link the object file to create an executable, specifying the sysroot and library paths
-"$MLIR_SYS_180_PREFIX"/bin/clang --sysroot=/usr/local/opt/riscv-gnu-toolchain/riscv64-unknown-elf --gcc-toolchain=/usr/local/opt/riscv-gnu-toolchain --target=riscv64 -march=rv64gc -mabi=lp64d ./tmp/output.o -o output
+"$MLIR_SYS_180_PREFIX"/bin/clang --sysroot=/usr/local/opt/riscv-gnu-toolchain/riscv64-unknown-elf --gcc-toolchain=/usr/local/opt/riscv-gnu-toolchain --target=riscv64 -fuse-ld=lld -march=rv64gc -mabi=lp64d -lc -lm ./tmp/output.o -o output
     
 # alternative to above?
 # riscv64-unknown-elf-gcc -mabi=lp64d ./tmp/output.o -o output
