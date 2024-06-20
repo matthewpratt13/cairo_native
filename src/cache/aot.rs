@@ -39,12 +39,16 @@ where
         key: K,
         program: &Program,
         opt_level: OptLevel,
+        target_triple: Option<&str>,
     ) -> Rc<AotNativeExecutor> {
         let NativeModule {
             module,
             registry,
             metadata,
-        } = self.context.compile(program, None).expect("should compile");
+        } = self
+            .context
+            .compile(program, None, target_triple)
+            .expect("should compile");
 
         // Compile module into an object.
         let object_data = crate::ffi::module_to_object(&module, opt_level).unwrap();
@@ -99,7 +103,9 @@ mod tests {
         };
 
         let function_id = &program.funcs.first().expect("should have a function").id;
-        let executor = cache.compile_and_insert((), &program, OptLevel::default());
+
+        let executor = cache.compile_and_insert((), &program, OptLevel::default(), None);
+
         let res = executor
             .invoke_dynamic(function_id, &[], Some(u128::MAX))
             .expect("should run");
